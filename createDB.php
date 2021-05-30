@@ -2,21 +2,22 @@
 
 require_once "config.php";
 
-$sql = "CREATE TABLE users (
+$sql = "CREATE TABLE forms (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-)";
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    gender SET('male','female') NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    programming_languages SET('Java','Python','C++','Ruby','Javascript','PHP','C#','R')
+    )";
 if ($conn->query($sql) === TRUE) {
-  header("location: dashboard.php");
   echo "<br>Table created successfully!";
 } else {
-  header("location: dashboard.php");
   echo "<br>Error creating table: " . $conn->error;
 }
 
 $conn->close();
 
 exit;
+
 ?>

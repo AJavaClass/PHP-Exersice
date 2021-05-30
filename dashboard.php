@@ -17,20 +17,27 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{ width: 360px; padding: 20px; }
-        body{ font: 14px sans-serif;}
+        body{ font: 14px sans-serif; text-align: center; }
     </style>
 </head>
 <body>
 
+<h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome.</h1>
+
+<p>
+    <a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>
+    <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+</p><br>
+
 <div style="margin:20px;text-align:center;" class="form-group">
   <form action="createDB.php" method="get">
-    <input type="submit" value="Δημιουργία ΒΔ">
+    <input class="btn btn-primary" type="submit" value="Δημιουργία ΒΔ">
   </form><br>
   <form action="script.php" method="get">
-    <input type="submit" value="Αναζήτηση">
+    <input class="btn btn-primary" type="submit" value="Αναζήτηση">
   </form><br>
   <form action="script.php" method="get">
-    <input type="submit" value="Δείξε Στοιχεία">
+    <input class="btn btn-primary" type="submit" value="Δείξε Στοιχεία">
   </form><br>
 </div>
 
