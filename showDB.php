@@ -24,7 +24,7 @@ require_once "config.php";
 $sql = "SELECT id, full_name, email, gender, country, programming_language FROM forms";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
+if ($result !== false && $result->num_rows > 0) {
      echo "<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Gender</th><th>Country</th><th>Favorite Programming Language</th></tr>";
      // output data of each row
      while($row = $result->fetch_assoc()) {
@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
      }
      echo "</table>";
 } else {
-     echo "0 results";
+     echo "<p>0 results</p>";
 }
 
 $conn->close();
