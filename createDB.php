@@ -8,7 +8,7 @@ $sql = "CREATE TABLE forms (
     email VARCHAR(255) NOT NULL UNIQUE,
     gender SET('male','female') NOT NULL,
     country VARCHAR(100) NOT NULL,
-    programming_languages SET('Java','Python','C++','Ruby','Javascript','PHP','C#','R')
+    programming_language SET('Java','Python','C++','Ruby','Javascript','PHP','C#','R') NOT NULL
     )";
 if ($conn->query($sql) === TRUE) {
   echo "<br>Table created successfully!";

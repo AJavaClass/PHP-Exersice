@@ -1,4 +1,5 @@
 <?php
+
 // Initialize the session
 session_start();
 
@@ -12,183 +13,34 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$fullname = $email = $gender = $country = $programming_language = "";
+$fullname = $email = $gender = "";
 $fullname_err = $email_err = $gender_err = "";
 
 // Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] == "post"){
 
   // Validate full_name
-  if(empty(trim($_POST["full_name"]))){
+  if(empty(trim($_GET["full_name"]))){
       $fullname_err = "Please enter a full name.";
-  } elseif(!preg_match_all('/^[A-Za-z\p{Greek}\s]+/u', trim($_POST["full_name"]))){
+  } elseif(!preg_match_all('/^[A-Za-z\p{Greek}\s]+/u', trim($_GET["full_name"]))){
       $fullname_err = "Full name can only contain letters";
-  } else{
-      // Prepare a select statement
-      $sql = "SELECT id FROM forms WHERE full_name = ?";
-
-      if($stmt = mysqli_prepare($conn, $sql)){
-          // Bind variables to the prepared statement as parameters
-          mysqli_stmt_bind_param($stmt, "s", $param_fullname);
-
-          // Set parameters
-          $param_fullname = trim($_POST["full_name"]);
-
-          // Attempt to execute the prepared statement
-          if(mysqli_stmt_execute($stmt)){
-              /* store result */
-              mysqli_stmt_store_result($stmt);
-              $fullname = trim($_POST["full_name"]);
-
-          } else{
-              echo "Oops! Something went wrong. Please try again later.";
-          }
-
-          // Close statement
-          mysqli_stmt_close($stmt);
-      }
+  } else {
+    $fullname = trim($_GET["full_name"]);
   }
 
   // Validate Email
-  if(empty(trim($_POST["email"]))){
+  if(empty(trim($_GET["email"]))){
       $email_err = "Please enter an Email.";
-  } else{
-      // Prepare a select statement
-      $sql = "SELECT id FROM forms WHERE email = ?";
-
-      if($stmt = mysqli_prepare($conn, $sql)){
-          // Bind variables to the prepared statement as parameters
-          mysqli_stmt_bind_param($stmt, "s", $param_email);
-
-          // Set parameters
-          $param_email = trim($_POST["email"]);
-
-          // Attempt to execute the prepared statement
-          if(mysqli_stmt_execute($stmt)){
-              /* store result */
-              mysqli_stmt_store_result($stmt);
-              $email = trim($_POST["email"]);
-
-          } else{
-              echo "Oops! Something went wrong. Please try again later.";
-          }
-
-          // Close statement
-          mysqli_stmt_close($stmt);
-      }
+  } else {
+      $email = trim($_GET["email"]);
   }
 
   // Validate gender
-  if (!isset($_POST['sex'])){
+  if (!isset($_GET['sex'])){
     $gender_err = "You should pick a gender.";
-  } else{
-      // Prepare a select statement
-      $sql = "SELECT id FROM forms WHERE gender = ?";
-
-      if($stmt = mysqli_prepare($conn, $sql)){
-          // Bind variables to the prepared statement as parameters
-          mysqli_stmt_bind_param($stmt, "s", $param_gender);
-
-          // Set parameters
-          $param_gender = trim($_POST["sex"]);
-
-          // Attempt to execute the prepared statement
-          if(mysqli_stmt_execute($stmt)){
-              /* store result */
-              mysqli_stmt_store_result($stmt);
-              $gender = trim($_POST["sex"]);
-
-          } else{
-              echo "Oops! Something went wrong. Please try again later.";
-          }
-
-          // Close statement
-          mysqli_stmt_close($stmt);
-      }
+  } else {
+    $gender = trim($_GET["sex"]);
   }
-
-  //Validate country
-
-  // Prepare a select statement
-  $sql = "SELECT id FROM forms WHERE country = ?";
-
-  if($stmt = mysqli_prepare($conn, $sql)){
-      // Bind variables to the prepared statement as parameters
-      mysqli_stmt_bind_param($stmt, "s", $param_country);
-
-      // Set parameters
-      $param_country = trim($_POST["country"]);
-
-      // Attempt to execute the prepared statement
-      if(mysqli_stmt_execute($stmt)){
-          /* store result */
-          mysqli_stmt_store_result($stmt);
-          $country = trim($_POST["country"]);
-
-      } else{
-          echo "Oops! Something went wrong. Please try again later.";
-      }
-
-      // Close statement
-      mysqli_stmt_close($stmt);
-    }
-  //Validate programming languages
-  $sql = "SELECT id FROM forms WHERE programming_language = ?";
-
-  if($stmt = mysqli_prepare($conn, $sql)){
-      // Bind variables to the prepared statement as parameters
-      mysqli_stmt_bind_param($stmt, "s", $param_programming_language);
-
-      // Set parameters
-      $param_programming_language = trim($_POST["programming_language"]);
-
-      // Attempt to execute the prepared statement
-      if(mysqli_stmt_execute($stmt)){
-          /* store result */
-          mysqli_stmt_store_result($stmt);
-          $programming_language = trim($_POST["programming_language"]);
-
-      } else{
-          echo "Oops! Something went wrong. Please try again later.";
-      }
-
-      // Close statement
-      mysqli_stmt_close($stmt);
-    }
-
-
-  // Check input errors before inserting in database
-  if(empty($fullname_err) && empty($email_err) && empty($gender_err)){
-
-      // Prepare an insert statement
-      $sql = "INSERT INTO forms (full_name, email, gender, country, programming_language) VALUES (?, ?, ?, ?, ?)";
-
-      if($stmt = mysqli_prepare($conn, $sql)){
-          // Bind variables to the prepared statement as parameters
-          mysqli_stmt_bind_param($stmt, "sssss", $param_fullname, $param_email, $param_gender, $param_country, $param_programming_language);
-
-          // Set parameters
-          $param_fullname = $fullname;
-          $param_email = $email;
-          $param_gender = $gender;
-          $param_country = $country;
-          $param_programming_language = $programming_language;
-
-          // Attempt to execute the prepared statement
-          if(mysqli_stmt_execute($stmt)){
-              // Redirect to login page
-              echo "<br>Form submited successfully!";
-          } else{
-              echo "<br>Error submiting the form: " . $conn->error;
-          }
-
-          // Close statement
-          mysqli_stmt_close($stmt);
-        }
-  }
-
-  // Close connection
-  mysqli_close($conn);
 
 }
 
@@ -198,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Form</title>
+    <title>Search</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{ width: 360px; padding: 20px; }
@@ -206,15 +58,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </style>
 </head>
 <body>
-    <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
-    <p>
-        <a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>
-        <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
-    </p>
+    <h2 style="font-weight:bold;margin:20px;">Αναζήτηση:</h2>
 
-    <h2 style="font-weight:bold;margin:20px;">Παρακαλώ συμπληρώστε τα παρακάτω στοιχεία</h2>
-
-    <form style="margin:40px;" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+    <form style="margin:40px;" action="searchDB.php" method="post">
       <div class="form-group">
           <label style="font-weight:bold;">Ονοματεπώνυμο:</label><br>
           <input style="width:350px;margin: 0 auto;float: none;" type="text" name="full_name" class="form-control <?php echo (!empty($fullname_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $fullname; ?>">
@@ -226,13 +72,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
           <span class="invalid-feedback"><?php echo $email_err; ?></span>
       </div>
       <div class="form-group">
-        <label style="font-weight:bold;">Είστε:</label>
+        <label style="font-weight:bold;">Φύλο:</label>
         <input type="radio" name="sex" class="<?php echo (!empty($gender_err)) ? 'is-invalid' : ''; ?>" value="male"> Άνδρας
         <input type="radio" name="sex" class="<?php echo (!empty($gender_err)) ? 'is-invalid' : ''; ?>" value="female"> Γυναίκα
         <span class="invalid-feedback"><?php echo $gender_err; ?></span>
       </div>
       <div class="form-group">
-        <label style="font-weight:bold;">Προέρχεστε από:</label><br>
+        <label style="font-weight:bold;">Χώρα:</label><br>
         <select id="country" name="country" class="<?php echo (!empty($country_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $country; ?>">
            <option value="Afganistan">Afghanistan</option>
            <option value="Albania">Albania</option>
@@ -484,7 +330,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <span class="invalid-feedback"><?php echo $country_err; ?></span>
       </div>
       <div class="form-group">
-        <label style="font-weight:bold;">Ποια είναι η αγαπημένη σας γλώσσα προγραμματισμού: </label><br>
+        <label style="font-weight:bold;">Γλώσσα προγραμματισμού: </label><br>
         <select id="programming_language" name="programming_language" value="<?php echo $programming_languages; ?>">
           <option value="Java">Java</option>
           <option value="Python">Python</option>
@@ -497,7 +343,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </select>
       </div>
       <div class="form-group">
-          <input class="btn btn-primary" type="submit" value="Submit">
+          <input class="btn btn-primary" type="submit" value="Search">
       </div>
     </form>
 </body>

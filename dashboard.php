@@ -1,4 +1,5 @@
 <?php
+
 // Initialize the session
 session_start();
 
@@ -13,7 +14,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{ width: 360px; padding: 20px; }
@@ -33,10 +34,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   <form action="createDB.php" method="get">
     <input class="btn btn-primary" type="submit" value="Δημιουργία ΒΔ">
   </form><br>
-  <form action="script.php" method="get">
+  <form action="searchForm.php" method="get">
     <input class="btn btn-primary" type="submit" value="Αναζήτηση">
   </form><br>
-  <form action="script.php" method="get">
+  <form action="showDB.php" method="get">
     <input class="btn btn-primary" type="submit" value="Δείξε Στοιχεία">
   </form><br>
 </div>
